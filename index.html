@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados em Casa</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: lightgray;
+        }
+        section{
+            background-color: #d32852;
+            box-shadow: 10px 10px #c4093c;
+
+            border-radius: 5px;
+            height: 650px;
+            width: 400px;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+            margin: auto;
+        }
+        #resultado{
+            height: 300px;
+            width: 300px;
+
+            border: 2px solid black;
+            border-radius: 10px;
+            background-color: #ff8594;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+        }
+        #total{
+            font-size: 120px;
+            color: white;
+        }
+        #calculo{
+            font-size: 40px;
+            color: white;
+            text-align: center;
+        
+            display: flex;
+        }
+        .hidden{
+            display: none;
+        }
+        .show{
+            display: block;
+        }
+        div{
+            font-size: 20px;
+            color: white;
+        }
+        #submit{
+            height: 30px;
+            width: 100px;
+            background-color: #ff8594;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 2px 5px black;
+        }
+        #submit:hover{
+            border: 1px solid black;
+        }
+        #submit:active{
+            transition: 100ms;
+            box-shadow: 0 0 0 0 black, inset 3px 3px 3px black;
+            transform: translate(4px, 4px);
+        }
+        #dados{
+            height: 20px;
+            width: 80px;
+            border: none;
+            background-color: #ff8594;
+            color: white;
+            font-size: 15px;
+        }
+        input{
+            border: none;
+            height: 20px;
+            width: 80px;
+            font-size: 15px;
+            text-align: center;
+            background-color: #ff8594;
+            color: white;
+        }
+
+    </style>
+
+</head>
+<body>
+    <section>
+        <div id="resultado">
+            <div id="total"></div>
+            <div id="calculo"></div>
+        </div>
+        <br><br>
+        <div> Selecione um Dado:
+            <select name="dados" id="dados" onclick="show()">
+                <option class="opt" value="4">D4</option>
+                <option class="opt" value="6">D6</option>
+                <option class="opt" value="8">D8</option>
+                <option class="opt" value="10">D10</option>
+                <option class="opt" value="12">D12</option>
+                <option class="opt" value="20">D20</option>
+                <option class="opt" value="100">D100</option>
+                <option class="opt" value="dx">Dx</option>
+            </select>
+        </div>
+        <br><br>
+        <div id="faces" class="hidden">Quantidade de Faces: <input type="number" id="Vfaces" value="4" min="1" max="1000" placeholder="4"></div>
+        <br><br>
+        <div>Quantidade de Rolagens: <input type="number" id="qrolagem" value="1" min="1" max="5" placeholder="1"></div>
+        <br><br>
+        <div>Modificador: <input type="number" id="modificador" value=0 min="-100" max="100" placeholder="0"></div>
+        <br><br>
+        <button id="submit" onclick="roll()">Rolar</button>
+    </section>
+</body>
+</html>
+
+<script>
+
+    
+
+    function show(){
+        var vroll = document.getElementById('dados').value;
+
+        if(vroll == "dx"){
+            document.getElementById('faces').classList.remove("hidden");
+            document.getElementById('faces').classList.add("show");
+        }else{
+            document.getElementById('faces').classList.remove("show");
+            document.getElementById('faces').classList.add("hidden");
+        }
+
+    }
+
+    function roll(){
+
+        var vroll = document.getElementById('dados').value;
+        var vfaces = document.getElementById('Vfaces').value;
+        var calculo = document.getElementById('calculo');
+        var modify = document.getElementById('modificador').value;
+        var qroll = document.getElementById('qrolagem').value;
+        
+        var cont = 1;
+        var resultRoll;
+        var resultS = 0;
+        var results = [];
+
+        if(qroll == ""){
+            qroll = parseInt(qroll);
+            qroll = 0;
+        }
+        if(modify == ""){
+            modify = parseInt(modify);
+            modify = 0;
+        }
+
+        qroll = parseInt(qroll);
+        modify = parseInt(modify);
+
+        while(cont <= qroll){
+            if(vroll == "dx"){
+                var resultRoll = Math.floor(Math.random() * vfaces) + 1;
+            }else{
+                var resultRoll = Math.floor(Math.random() * vroll) + 1;
+            }
+            
+            results.push(resultRoll);
+
+            cont++;
+        }
+
+        if(calculo.innerHTML != ""){
+            calculo.innerHTML = "";
+        }
+
+        results.forEach(function(v){
+            resultS += v;
+
+            calculo.innerHTML += v + " + ";
+        });
+
+
+        var resultSModify = resultS + modify;
+
+
+        document.getElementById('total').innerHTML = resultSModify;
+        calculo.innerHTML += modify;
+
+    }
+
+</script>
